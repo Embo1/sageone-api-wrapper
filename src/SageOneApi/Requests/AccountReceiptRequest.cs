@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using RestSharp.Deserializers;
+using RestSharp.Serialization.Json;
 using RestSharp.Serializers;
 using SageOneApi.Interfaces;
 using SageOneApi.Models;
@@ -12,7 +13,7 @@ namespace SageOneApi.Requests
 
         public PagingResponse<AccountReceipt> Get(int skip = 0)
         {
-            var url = string.Format("AccountReceipt/Get?apikey={0}&companyid={1}", _apiKey, _companyId);
+            var url = $"AccountReceipt/Get?apikey={_apiKey}&companyid={_companyId}";
 
             if (skip > 0)
                 url += "&$skip=" + skip;
@@ -28,7 +29,7 @@ namespace SageOneApi.Requests
 
         public Models.AccountReceipt Save(AccountReceipt accountReceipt)
         {
-            var url = string.Format("AccountReceipt/Save?apikey={0}&companyid={1}", _apiKey, _companyId);
+            var url = $"AccountReceipt/Save?apikey={_apiKey}&companyid={_companyId}";
             var request = new RestRequest(url, Method.POST) { JsonSerializer = new JsonSerializer() };
             request.RequestFormat = DataFormat.Json;
             request.AddBody(accountReceipt);

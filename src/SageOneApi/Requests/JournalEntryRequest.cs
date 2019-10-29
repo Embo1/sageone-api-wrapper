@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using RestSharp.Deserializers;
+using RestSharp.Serialization.Json;
 using RestSharp.Serializers;
 using SageOneApi.Interfaces;
 using SageOneApi.Models;
@@ -12,7 +13,8 @@ namespace SageOneApi.Requests
 
         public JournalEntry Get(int id)
         {
-            var response = _client.Execute<JournalEntry>(new RestRequest(string.Format("JournalEntry/Get/{0}?apikey={1}&companyid={2}", id, _apiKey, _companyId), Method.GET));
+            var response = _client.Execute<JournalEntry>(new RestRequest(
+                $"JournalEntry/Get/{id}?apikey={_apiKey}&companyid={_companyId}", Method.GET));
             StatusDescription = response.StatusDescription;
             StatusCode = response.StatusCode;
             return response.Data;
@@ -20,16 +22,16 @@ namespace SageOneApi.Requests
 
         public PagingResponse<JournalEntry> Get(bool includeDetail = false, bool includeSupplierDetails = false, string filter = "", int skip = 0)
         {
-            var url = string.Format("JournalEntry/Get?companyid={0}&includeDetail={1}&includeSupplierDetails={2}&apikey={3}", _companyId, includeDetail.ToString().ToLower(), includeSupplierDetails.ToString().ToLower(), _apiKey);
+            var url =
+                $"JournalEntry/Get?companyid={_companyId}&includeDetail={includeDetail.ToString().ToLower()}&includeSupplierDetails={includeSupplierDetails.ToString().ToLower()}&apikey={_apiKey}";
 
             if (!string.IsNullOrEmpty(filter))
-                url += string.Format("&$filter={0}", filter);
+                url += $"&$filter={filter}";
 
             if (skip > 0)
                 url += "&$skip=" + skip;
 
-            var request = new RestRequest(url, Method.GET);
-            request.RequestFormat = DataFormat.Json;
+            var request = new RestRequest(url, Method.GET) {RequestFormat = DataFormat.Json};
 
             var response = _client.Execute(request);
             JsonDeserializer deserializer = new JsonDeserializer();
@@ -41,9 +43,11 @@ namespace SageOneApi.Requests
 
         public JournalEntry Save(JournalEntry journalEntry)
         {
-            var url = string.Format("JournalEntry/Save?apikey={0}&companyid={1}", _apiKey, _companyId);
-            var request = new RestRequest(url, Method.POST) { JsonSerializer = new JsonSerializer() };
-            request.RequestFormat = DataFormat.Json;
+            var url = $"JournalEntry/Save?apikey={_apiKey}&companyid={_companyId}";
+            var request = new RestRequest(url, Method.POST)
+            {
+                JsonSerializer = new JsonSerializer(), RequestFormat = DataFormat.Json
+            };
             request.AddBody(journalEntry);
             var response = _client.Execute<JournalEntry>(request);
             StatusDescription = response.StatusDescription;
@@ -53,9 +57,11 @@ namespace SageOneApi.Requests
 
         public JournalEntry Calculate(JournalEntry journalEntry)
         {
-            var url = string.Format("JournalEntry/Calculate?apikey={0}&companyid={1}", _apiKey, _companyId);
-            var request = new RestRequest(url, Method.POST) { JsonSerializer = new JsonSerializer() };
-            request.RequestFormat = DataFormat.Json;
+            var url = $"JournalEntry/Calculate?apikey={_apiKey}&companyid={_companyId}";
+            var request = new RestRequest(url, Method.POST)
+            {
+                JsonSerializer = new JsonSerializer(), RequestFormat = DataFormat.Json
+            };
             request.AddBody(journalEntry);
             var response = _client.Execute<JournalEntry>(request);
             StatusDescription = response.StatusDescription;
@@ -65,7 +71,7 @@ namespace SageOneApi.Requests
 
         public bool Delete(int id)
         {
-            var url = string.Format("JournalEntry/Delete/{0}?apikey={1}&companyid={2}", id, _apiKey, _companyId);
+            var url = $"JournalEntry/Delete/{id}?apikey={_apiKey}&companyid={_companyId}";
             var response = _client.Execute<JournalEntry>(new RestRequest(url, Method.DELETE));
             return response.ResponseStatus == ResponseStatus.Completed;
         }

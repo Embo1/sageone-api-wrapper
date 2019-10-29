@@ -1,6 +1,4 @@
-﻿using RestSharp;
-using RestSharp.Serializers;
-using SageOneApi.Models;
+﻿using SageOneApi.Models;
 namespace SageOneApi.Interfaces
 {
     public interface IBankTransactionRequest

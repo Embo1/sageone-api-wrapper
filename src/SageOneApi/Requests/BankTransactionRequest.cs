@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
+﻿using RestSharp;
 using RestSharp.Deserializers;
+using RestSharp.Serialization.Json;
 using RestSharp.Serializers;
 using SageOneApi.Interfaces;
 using SageOneApi.Models;
@@ -17,7 +13,8 @@ namespace SageOneApi.Requests
 
         public BankTransaction Get(int id)
         {
-            var response = _client.Execute<BankTransaction>(new RestRequest(string.Format("BankTransaction/Get/{0}?apikey={1}&companyid={2}", id, _apiKey, _companyId), Method.GET));
+            var response = _client.Execute<BankTransaction>(new RestRequest(
+                $"BankTransaction/Get/{id}?apikey={_apiKey}&companyid={_companyId}", Method.GET));
             StatusDescription = response.StatusDescription;
             StatusCode = response.StatusCode;
             return response.Data;
@@ -25,10 +22,10 @@ namespace SageOneApi.Requests
 
         public PagingResponse<BankTransaction> Get(string filter = "", int skip = 0)
         {
-            var url = string.Format("BankTransaction/Get?apikey={0}&companyid={1}", _apiKey, _companyId);
+            var url = $"BankTransaction/Get?apikey={_apiKey}&companyid={_companyId}";
 
             if (!string.IsNullOrEmpty(filter))
-                url = string.Format("BankTransaction/Get?apikey={0}&companyid={1}&$filter={2}", _apiKey, _companyId, filter);
+                url = $"BankTransaction/Get?apikey={_apiKey}&companyid={_companyId}&$filter={filter}";
 
             if (skip > 0)
                 url += "&$skip=" + skip;
@@ -43,7 +40,7 @@ namespace SageOneApi.Requests
 
         public BankTransaction Save(BankTransaction bankTransaction)
         {
-            var url = string.Format("BankTransaction/Save?apikey={0}&companyid={1}", _apiKey, _companyId);
+            var url = $"BankTransaction/Save?apikey={_apiKey}&companyid={_companyId}";
             var request = new RestRequest(url, Method.POST)
             {
                 JsonSerializer = new JsonSerializer(),

@@ -1,4 +1,5 @@
 ﻿using RestSharp;
+using RestSharp.Serialization.Json;
 using RestSharp.Serializers;
 using SageOneApi.Interfaces;
 
@@ -10,7 +11,7 @@ namespace SageOneApi.Requests
 
         public string GetCustomerZoneInvoiceUrl(int invoiceId, int customerId)
         {
-            var url = string.Format("CustomerZone/GetCustomerZoneInvoiceUrl/?apikey={0}&companyid={1}", _apiKey, _companyId);
+            var url = $"CustomerZone/GetCustomerZoneInvoiceUrl/?apikey={_apiKey}&companyid={_companyId}";
             var request = new RestRequest(url, Method.POST) { JsonSerializer = new JsonSerializer() };
             request.RequestFormat = DataFormat.Json;
             request.AddBody(new CustomerZoneRequestModel() { CustomerId = customerId, DocumentHeaderId = invoiceId });
@@ -20,7 +21,7 @@ namespace SageOneApi.Requests
 
         public string GetCustomerZoneQuoteUrl(int quoteId, int customerId)
         {
-            var url = string.Format("CustomerZone/GetCustomerZoneQuoteUrl/?apikey={0}&companyid={1}", _apiKey, _companyId);
+            var url = $"CustomerZone/GetCustomerZoneQuoteUrl/?apikey={_apiKey}&companyid={_companyId}";
             var request = new RestRequest(url, Method.POST) { JsonSerializer = new JsonSerializer() };
             request.RequestFormat = DataFormat.Json;
             request.AddBody(new CustomerZoneRequestModel() { CustomerId = customerId, DocumentHeaderId = quoteId });

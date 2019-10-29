@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SageOneApi.Models;
+﻿using SageOneApi.Models;
 
 namespace SageOneApi.Interfaces
 {
